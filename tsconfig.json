@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "esModuleInterop": false,
+    "target": "ES2017",
+    "moduleResolution": "NodeNext",
+    "sourceMap": false,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "rootDir": "src",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "*": ["src/interfaces/*"],
+      "@/*": ["src/*"]
+    },
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "declaration": true,
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/**/*.ts", "./@types/index.d.ts"]
+}
