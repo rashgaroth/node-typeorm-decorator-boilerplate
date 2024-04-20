@@ -1,5 +1,4 @@
 import bodyParser from 'body-parser';
-import { useContainer } from 'class-validator';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import express, { Request } from 'express';
 import morgan from 'morgan';
@@ -79,12 +78,9 @@ const getApp = (): express.Express => {
   _app.use('/static/', express.static('public/files'));
   _app.use('/static/private/', express.static('public/assets'));
 
-  useContainer(_app, { fallbackOnErrors: true });
-
   const storage = getMetadataArgsStorage();
   const dtoSchemas = validationMetadatasToSchemas({
     refPointerPrefix: '#/components/schemas/',
-    always: true,
   });
 
   const specs = parseRoutingController(storage, opts, {
@@ -108,6 +104,9 @@ const getApp = (): express.Express => {
           type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',
+          in: 'header',
+          name: 'Authorization',
+          description: 'Provide a valid JWT token to access the endpoint',
         },
       },
     },
