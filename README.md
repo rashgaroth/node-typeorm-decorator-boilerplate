@@ -25,7 +25,7 @@ A boilerplate project for building Node.js applications using Typescript, Routin
 Clone the repository:
 
 ```bash
-git clone
+git clone https://github.com/rashgaroth/node-typeorm-decorator-boilerplate.git <project_name>
 ```
 
 Install dependencies:
