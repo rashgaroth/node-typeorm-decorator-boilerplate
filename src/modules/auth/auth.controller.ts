@@ -18,6 +18,11 @@ export class AuthController {
     this.authService = new AuthService();
   }
 
+  @Get('/health')
+  healthCheck() {
+    return 'OK';
+  }
+
   @Post('/authorize')
   @ApiDto(AuthorizeDto, {
     summary: 'Authorize user to access the application',

@@ -12,7 +12,9 @@ const connect = async () => {
   try {
     logger.info('Starting the server...');
     await initDataSource();
-    app.listen(PORT, () => {
+    app.listen(parseInt(PORT as string), '0.0.0.0', () => {
+      // eslint-disable-next-line no-console
+      console.log('The server is running on port: %s', PORT);
       logger.info(`Server running at ${PORT}`);
     });
   } catch (e) {
