@@ -1,6 +1,6 @@
 # Node JS Routing Controller Boilerplate
 
-A boilerplate project for building Node.js applications using Typescript, Routing Controllers, TypeORM, and Class Validator.
+A boilerplate project for building Node.js applications using Typescript, Routing Controllers, TypeORM, and Class Validator. Simple deployment & simple setup supported with custom decorators
 
 ## Features
 
@@ -17,8 +17,8 @@ A boilerplate project for building Node.js applications using Typescript, Routin
 ### Prerequisites
 
 - Node.js
-- npm
-- Docker (optional)
+- Npm
+- Docker
 
 ### Installation
 
@@ -118,6 +118,62 @@ export default class RolePermissionSeeder extends Seeder {
 }
 ```
 
-### Documentation
+### Open API Documentation
 
-To view the API documentation, navigate to `http://localhost:4000/docs`.
+To view the API documentation, navigate to `http://localhost:{YOUR_PORT}/docs`.
+
+## Quick start
+
+To create an API you just need to create your controller & service
+
+### Create a new module
+
+To create a new module, you need to create one specific module like image below:
+
+<img width="223" alt="image" src="https://github.com/rashgaroth/node-typeorm-decorator-boilerplate/assets/50513263/f9328000-fbbf-47d1-b961-79a863da9bbc">
+
+- **DTO** -- is the internal DTOs for it's module
+- **{*}.controller.ts** -- is the controller where you will define your routes
+- **{*}.service.ts** -- is the service that can provide any returned value / proceed any value
+
+  ### Create an APIs
+
+  Create your own controller with the decorator
+
+```typescript
+import { CurrUser } from 'common.interface';
+import {
+  Authorized,
+  CurrentUser,
+  Get,
+  JsonController,
+  Put,
+} from 'routing-controllers';
+
+@JsonController('/identity')
+export class IdentityController {
+  identityService: IdentityService;
+
+  constructor() {
+    this.identityService = new IdentityService();
+  }
+
+  @Get('/health')
+  @Authorized(['*'])
+  healthCheck() {
+    return 'OK';
+  }
+
+  @Get('/me')
+  @Authorized(['*'])
+  healthCheck(
+   @CurrentUser() user: CurrUser
+  ) {
+    return this.identityService.getMe(user.id);
+  }
+}
+```
+
+- **@Authorized** -- is the user validation to ensure that every request has authorization method (bearer)
+- **healthCheck()** -- is your controller's function
+- **@CurrentUser()** -- is the function decorator that will decode & return the current user 
