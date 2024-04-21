@@ -22,13 +22,13 @@ A boilerplate project for building Node.js applications using Typescript, Routin
 
 ### Installation
 
-1. Clone the repository:
+Clone the repository:
 
 ```bash
 git clone
 ```
 
-2. Install dependencies:
+Install dependencies:
 
 ```bash
 npm install
@@ -40,7 +40,7 @@ or
 yarn install
 ```
 
-3. Create a `.env` file in the root directory and configure the environment variables:
+Create a `.env` file in the root directory and configure the environment variables:
 
 ```bash
 BASE_URL="http://localhost:4000"
@@ -64,7 +64,7 @@ or
 cp .env.example .env
 ```
 
-4. Start the application:
+Start the application:
 
 ```bash
 npm start:dev
@@ -130,13 +130,13 @@ To create an API you just need to create your controller & service
 
 To create a new module, you need to create one specific module like image below:
 
-<img width="223" alt="image" src="https://github.com/rashgaroth/node-typeorm-decorator-boilerplate/assets/50513263/f9328000-fbbf-47d1-b961-79a863da9bbc">
+<img width="100%" alt="image" src="https://github.com/rashgaroth/node-typeorm-decorator-boilerplate/assets/50513263/f9328000-fbbf-47d1-b961-79a863da9bbc">
 
 - **DTO** -- is the internal DTOs for it's module
 - **{*}.controller.ts** -- is the controller where you will define your routes
 - **{*}.service.ts** -- is the service that can provide any returned value / proceed any value
 
-  ### Create an APIs
+### Create an APIs
 
   Create your own controller with the decorator
 
@@ -176,4 +176,28 @@ export class IdentityController {
 
 - **@Authorized** -- is the user validation to ensure that every request has authorization method (bearer)
 - **healthCheck()** -- is your controller's function
-- **@CurrentUser()** -- is the function decorator that will decode & return the current user 
+- **@CurrentUser()** -- is the function decorator that will decode & return the current user
+
+## Docker
+
+This docker-compose.yml file is used to define two services: identity-db and digivite-identity. Docker Compose uses this file to create and manage these services.
+
+The identity-db service is a PostgreSQL database. The `image: postgres:latest` line tells Docker to use the latest version of the PostgreSQL Docker image. The env_file: `./.env.ci` line tells Docker to use the environment variables defined in the `.env.ci` file. The expose: 5433 line makes the PostgreSQL service available on port 5433 to linked services. The volumes: `./data:/var/lib/postgresql/data` line persists the data of the database by mapping the data directory of the PostgreSQL container to a local directory called `./data`.
+
+To run the application using Docker, execute the following command:
+
+```bash
+docker-compose up
+```
+
+To stop the application, execute the following command:
+
+```bash
+docker-compose down
+```
+
+## To Do
+
+- [ ] Add unit testing
+- [ ] Kubernetes Deployment
+- [ ] CI/CD Integration
