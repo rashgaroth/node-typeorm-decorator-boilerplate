@@ -1,17 +1,18 @@
-import bodyParser from 'body-parser';
+import * as bodyParser from 'body-parser';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import express, { Request } from 'express';
+import express from 'express';
 import morgan from 'morgan';
 import { ReferenceObject, SchemaObject } from 'openapi3-ts/oas30';
-import path from 'path';
+import * as path from 'path';
 import {
   Action,
+  createExpressServer,
   getMetadataArgsStorage,
   RoutingControllersOptions,
   UnauthorizedError,
-  useExpressServer,
 } from 'routing-controllers';
 import * as sui from 'swagger-ui-express';
+import 'reflect-metadata';
 
 import { AuthLib } from '@/lib/auth.lib';
 
@@ -25,14 +26,9 @@ const corsOption = {
 };
 
 const getApp = (): express.Express => {
-  const defaultApp = express();
-
-  defaultApp.use(bodyParser.json());
-  defaultApp.use(morgan('dev'));
-
   const opts = {
-    controllers: [path.join(`${__dirname}/../modules/**/*.controller.ts`)],
-    middlewares: [path.join(`${__dirname}/../middlewares/*.middleware.ts`)],
+    controllers: [path.join(`${__dirname}/../modules/**/*.controller.*`)],
+    middlewares: [path.join(`${__dirname}/../middlewares/*.middleware.*`)],
     defaultErrorHandler: false,
     cors: corsOption,
     validation: true,
@@ -40,11 +36,11 @@ const getApp = (): express.Express => {
       nullResultCode: 400,
       undefinedResultCode: 204,
     },
-    interceptors: [path.join(`${__dirname}/../interceptors/*.interceptor.ts`)],
+    interceptors: [path.join(`${__dirname}/../interceptors/*.interceptor.*`)],
     classTransformer: true,
     routePrefix: '/api',
     authorizationChecker: async (ctx: Action, roles: string[]) => {
-      const req = ctx.request as Request;
+      const req = ctx.request as express.Request;
       const token = req.headers['authorization'];
       if (!token || !token?.split(' ')[1]) {
         throw new UnauthorizedError(
@@ -61,7 +57,7 @@ const getApp = (): express.Express => {
       return await authService.validateUserRole(payload.id, roles);
     },
     currentUserChecker: async (ctx: Action) => {
-      const req = ctx.request as Request;
+      const req = ctx.request as express.Request;
       const token = req.headers['authorization'];
       if (!token || !token?.split(' ')[1]) {
         throw new UnauthorizedError(
@@ -74,9 +70,14 @@ const getApp = (): express.Express => {
       return payload;
     },
   } as RoutingControllersOptions;
-  const _app = useExpressServer(defaultApp, opts);
-  _app.use('/static/', express.static('public/files'));
-  _app.use('/static/private/', express.static('public/assets'));
+
+  const defaultApp = createExpressServer(opts);
+
+  defaultApp.use(bodyParser.json());
+  defaultApp.use(morgan('dev'));
+
+  defaultApp.use('/static/', express.static('public/files'));
+  defaultApp.use('/static/private/', express.static('public/assets'));
 
   const storage = getMetadataArgsStorage();
   const dtoSchemas = validationMetadatasToSchemas({
@@ -113,7 +114,7 @@ const getApp = (): express.Express => {
     security: [{ bearerAuth: [] }],
   });
 
-  _app.use(
+  defaultApp.use(
     '/docs',
     sui.serve,
     sui.setup(specs, {
@@ -126,7 +127,7 @@ const getApp = (): express.Express => {
     })
   );
 
-  return _app;
+  return defaultApp;
 };
 
 const app = getApp();

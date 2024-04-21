@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --collectCoverage",
-    "prebuild": "rimraf dist/",
-    "build": "tsc --project tsconfig.json",
+    "prebuild": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "start": "npm run serve",
     "serve": "node dist/index.js",
     "start:dev": "nodemon",
@@ -47,12 +47,13 @@
     "prettier": "^2.8.8",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.6",
+    "tsc-alias": "^1.8.8",
     "tsx": "^4.7.1",
     "typescript": "^4.9.5",
-    "typescript-eslint": "^7.3.1"
+    "typescript-eslint": "^7.3.1",
+    "typescript-transform-paths": "^3.4.7"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "^6.6.0",
     "aws-sdk": "^2.1581.0",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
@@ -63,13 +64,11 @@
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.19.0",
-    "express-joi-validator": "^2.0.1",
     "express-jwt": "^6.1.2",
     "express-winston": "^3.4.0",
+    "glob": "^10.3.12",
     "google-auth-library": "^9.7.0",
-    "himalaya": "^1.1.0",
     "http-status-codes": "^1.4.0",
-    "jsdom": "^24.0.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "lodash.capitalize": "^4.2.1",
@@ -79,19 +78,16 @@
     "moment": "^2.30.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.4",
-    "multer-s3": "^2.10.0",
     "mysql": "^2.18.1",
     "openapi3-ts": "^4.2.2",
     "path-to-regexp": "^6.2.1",
     "pg": "^8.11.3",
-    "qrcode-terminal": "^0.12.0",
     "reflect-metadata": "^0.1.14",
     "routing-controllers": "^0.10.4",
     "supertest": "^6.3.4",
     "swagger-ui-express": "^5.0.0",
     "typeorm": "^0.3.20",
     "uuid": "^8.3.2",
-    "winston": "^3.12.0",
-    "zod": "^3.22.4"
+    "winston": "^3.12.0"
   }
 }
