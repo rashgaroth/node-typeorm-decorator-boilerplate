@@ -166,7 +166,7 @@ export class IdentityController {
 
   @Get('/me')
   @Authorized(['*'])
-  healthCheck(
+  getMe(
    @CurrentUser() user: CurrUser
   ) {
     return this.identityService.getMe(user.id);
